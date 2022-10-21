@@ -20,3 +20,9 @@ ggplot(d, aes(x=virus, y=death)) + geom_line()
 ggplot(d, aes(x=virus, y=death)) + geom_point(size=3, col="coral") + geom_line(col="blue")
 
 ggplot(d, aes(x=virus, y=death)) + geom_polygon()
+
+# let's use our own data!
+setwd("C:/lab/")
+
+# to read the file inside our folder we use read.table
+covid <- read.table("covid_agg.csv")   #covid_agg.csv is the file's name inside our folder
