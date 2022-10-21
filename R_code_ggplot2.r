@@ -26,3 +26,5 @@ setwd("C:/lab/")
 
 # to read the file inside our folder we use read.table
 covid <- read.table("covid_agg.csv")   #covid_agg.csv is the file's name inside our folder
+Errore in scan(file = file, what = what, sep = sep, quote = quote, dec = dec,  : 
+  la linea 6 non ha 5 elementi
