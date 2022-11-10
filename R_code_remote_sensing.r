@@ -9,3 +9,4 @@ Errore: caricamento pacchetto o namespace fallito per ‘RStoolbox’ in loadNam
  non c'è alcun pacchetto chiamato ‘recipes’
 In aggiunta: Messaggio di avvertimento:
 il pacchetto ‘RStoolbox’ è stato creato con R versione 4.2.2 
+
