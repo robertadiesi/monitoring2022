@@ -18,3 +18,14 @@ plot(p224r63_2011)
 
 cl <- colorRampPalette(c('black','grey','light grey'))(100) # 
 plot(p224r63_2011, col=cl)
+
+plot(p224r63_2011$B1_sre, col=cl)
+plot(p224r63_2011[[1]], col=cl)
+
+par(mfrow=c(1,2)) # multiframe
+plot(p224r63_2011[[2]], col=cl)
+
+plot(p224r63_2011[[1]], col=cl)
+plot(p224r63_2011[[2]], col=cl)
+plot(p224r63_2011[[3]], col=cl)
+plot(p224r63_2011[[4]], col=cl)
