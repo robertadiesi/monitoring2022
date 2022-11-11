@@ -10,3 +10,11 @@ Errore: caricamento pacchetto o namespace fallito per ‘RStoolbox’ in loadNam
 In aggiunta: Messaggio di avvertimento:
 il pacchetto ‘RStoolbox’ è stato creato con R versione 4.2.2 
 
+setwd("C:/Users/Rober/Desktop/lab")
+
+p224r63_2011 <- brick("p224r63_2011_masked.grd")
+p224r63_2011
+plot(p224r63_2011)
+
+cl <- colorRampPalette(c('black','grey','light grey'))(100) # 
+plot(p224r63_2011, col=cl)
