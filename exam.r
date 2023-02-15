@@ -1,7 +1,11 @@
+# my first R project!
+
+# first of all let's set the working directory
 
 setwd("C:/Users/Rober/Desktop/exam_monitoring")
 
 
+# I # recall the libraries for already installed packaged that I need 
 
 library(ncdf4) # for formatting our files - to manage spatial data from Copernicus, read and manipulate them (in nc)
 library(raster) # work with raster file (single layer data)
@@ -12,8 +16,10 @@ library(gridExtra) # for grid.arrange plotting, creating a multiframe
 library(rgdal)
 
 
+# importing the Copernicus data
 # one by one
-FCOVER2000 <- raster("c_gls_FCOVER_200003100000_GLOBE_VGT_V2.0.2.nc")
+
+FCOVER2000 <- raster("c_gls_FCOVER_200003100000_GLOBE_VGT_V2.0.2.nc")     
 FCOVER2000
 
 FCOVER2005 <- raster("c_gls_FCOVER_200503100000_GLOBE_VGT_V2.0.1.nc")
@@ -38,6 +44,7 @@ rlist
 list_rast <- lapply(rlist, raster) 
 list_rast
 
+# Create a stack
 FCOVERstack <- stack(list_rast) 
 FCOVERstack
 
@@ -46,9 +53,10 @@ names(FCOVERstack) <- c("FCOVER.1km.1","FCOVER.1km.2","FCOVER.1km.3","FCOVER.1km
 plot(FCOVERstack)
 
 
-# crop over osa peninsula
-ext <-c (-83.7415, -83.2471, 8.3611, 8.7716)
+# cropping the image focusing on the area of interest, in this case is Costa Rica
+ext <-c (-85.9797, -82.7917, 7.9958, 11.2468)
 FCOVERcrop <- crop(FCOVERstack, ext)
+plot(FCOVERcrop)
 FCOVERcrop
 
 
@@ -67,15 +75,95 @@ FCOVER2015_df <- as.data.frame(FCOVER2015, xy=TRUE)
 FCOVER2020_df <- as.data.frame(FCOVER2020, xy=TRUE) 
 
 
-g1 <- ggplot() + geom_raster(FCOVER2000_df, mapping = aes(x=x, y=y, fill=FCOVER.1km.1)) + scale_fill_viridis(option = "D") + ggtitle("Forest percentage in 2000") + labs(fill = "FCOVER")
-g2 <- ggplot() + geom_raster(FCOVER2005_df, mapping = aes(x=x, y=y, fill=FCOVER.1km.2)) + scale_fill_viridis(option = "D") + ggtitle("Forest percentage in 2005") + labs(fill = "FCOVER")
-g3 <- ggplot() + geom_raster(FCOVER2010_df, mapping = aes(x=x, y=y, fill=FCOVER.1km.3)) + scale_fill_viridis(option = "D") + ggtitle("Forest percentage in 2010") + labs(fill = "FCOVER")
-g4 <- ggplot() + geom_raster(FCOVER2015_df, mapping = aes(x=x, y=y, fill=FCOVER.1km.4)) + scale_fill_viridis(option = "D") + ggtitle("Forest percentage in 2015") + labs(fill = "FCOVER")
-g5 <- ggplot() + geom_raster(FCOVER2020_df, mapping = aes(x=x, y=y, fill=FCOVER.1km.5)) + scale_fill_viridis(option = "D") + ggtitle("Forest percentage in 2020") + labs(fill = "FCOVER")
+g1 <- ggplot() + geom_raster(FCOVER2000_df, mapping = aes(x=x, y=y, fill=FCOVER.1km.1)) + scale_fill_viridis(option = "D") + ggtitle("Forest Cover in 2000") + labs(fill = "FCOVER")
+g2 <- ggplot() + geom_raster(FCOVER2005_df, mapping = aes(x=x, y=y, fill=FCOVER.1km.2)) + scale_fill_viridis(option = "D") + ggtitle("Forest Cover in 2005") + labs(fill = "FCOVER")
+g3 <- ggplot() + geom_raster(FCOVER2010_df, mapping = aes(x=x, y=y, fill=FCOVER.1km.3)) + scale_fill_viridis(option = "D") + ggtitle("Forest Cover in 2010") + labs(fill = "FCOVER")
+g4 <- ggplot() + geom_raster(FCOVER2015_df, mapping = aes(x=x, y=y, fill=FCOVER.1km.4)) + scale_fill_viridis(option = "D") + ggtitle("Forest Cover in 2015") + labs(fill = "FCOVER")
+g5 <- ggplot() + geom_raster(FCOVER2020_df, mapping = aes(x=x, y=y, fill=FCOVER.1km.5)) + scale_fill_viridis(option = "D") + ggtitle("Forest Cover in 2020") + labs(fill = "FCOVER")
 
 #patchwork package 
 g2 + g1 + g3 / g4 + g5
 
 # I don't like it, so let's use 
-grid.arrange(g1, g2, g3, g4, g5, nrow=2)
+grid.arrange(g1, g2, g3, g4, g5, nrow=3)
+
+# saving the file in PNG format in the output folder
+png("outputs_fcover_ggplot.png", res= 300, width = 3000, heigh = 3000)
+grid.arrange(g1, g2, g3, g4, g5, nrow=3)
+dev.off()
+
+# # Create a color palette with colorRampPalette and trying different colors
+cl1 <- colorRampPalette(colors = c('red','yellow','lightgreen','darkgreen'))(100)
+plot(FCOVERcrop, col=cl1) # in red less vegetation cover
+
+# Plot FCOVER of each year
+par(mfrow=c(2,3))
+plot(FCOVER2000, main="Forest Cover in 2000", col=cl1)
+plot(FCOVER2005, main="Forest Cover in 2005", col=cl1)
+plot(FCOVER2010, main="Forest Cover in 2010", col=cl1)
+plot(FCOVER2015, main="Forest Cover in 2015", col=cl1)
+plot(FCOVER2020, main="Forest Cover in 2020", col=cl1)
+
+# export
+png("outputs_fcover.png", res = 300, width = 3000, heigh = 3000)
+par(mfrow=c(3,2))
+plot(FCOVER2000, main="Forest Cover in 2000", col=cl1)
+plot(FCOVER2005, main="Forest Cover in 2005", col=cl1)
+plot(FCOVER2010, main="Forest Cover in 2010", col=cl1)
+plot(FCOVER2015, main="Forest Cover in 2015", col=cl1)
+plot(FCOVER2020, main="Forest Cover in 2020", col=cl1)
+dev.off()
+
+
+# plotting frequency distribution of forest cover value -> plot all histograms together
+
+par(mfrow=c(3,2))
+hist(FCOVER2000, main= "Forest Cover in 2000")
+hist(FCOVER2005, main= "Forest Cover in 2005")
+hist(FCOVER2010, main= "Forest Cover in 2010")
+hist(FCOVER2015, main= "Forest Cover in 2015")
+hist(FCOVER2020, main= "Forest Cover in 2020")
+
+#Export them
+png("outputs_hist_FCOVER.png", res = 300, width = 3000, heigh = 3000)
+par(mfrow=c(3,2))
+hist(FCOVER2000, main= "Forest Cover in 2000")
+hist(FCOVER2005, main= "Forest Cover in 2005")
+hist(FCOVER2010, main= "Forest Cover in 2010")
+hist(FCOVER2015, main= "Forest Cover in 2015")
+hist(FCOVER2020, main= "Forest Cover in 2020")
+dev.off()
+
+# when we have many graphs, we can plot automathically all graphs together
+pairs(FCOVERcrop)
+
+# plotting values of 2000 against 2020 to better see the differences 
+plot(FCOVER2000, FCOVER2020, xlab = "Forest Cover in 2000", ylab = "Forest Cover in 2020") 
+abline(0, 1, col="blue") 
+
+# Export
+png("outputs_FCOVER_2000vs2020.png", res = 300, width = 3000, heigh = 3000)
+plot(FCOVER2000, FCOVER2020, xlab = "Forest Cover in 2000", ylab = "Forest Cover in 2020") 
+abline(0, 1, col="blue") 
+dev.off()
+
+# I want to produce a matrix of scatterplots 
+pairs(FCOVERcrop)
+
+# Export
+png("outputs_FCOVER_matrix.png", res = 300, width = 3000, heigh = 3000)
+pairs(FCOVERcrop)
+dev.off()
+
+# Plot the difference between 2000-2020 so I can see better the differences between the two layers
+dif <- FCOVER2000 - FCOVER2020
+dif
+cl2 <- colorRampPalette(colors = c('red','yellow','lightgreen','black'))(100)
+plot(dif, col=cl2, main = "Difference Forest Cover between 2000 and 2020")
+
+
+# Export
+png("outputs_FCOVER_dif.png", res = 600, width = 3000, heigh = 3000)
+plot(dif, col=cl2, main = "Difference Forest Cover between 2000 and 2020")
+dev.off()
 
