@@ -167,3 +167,69 @@ png("outputs_FCOVER_dif.png", res = 600, width = 3000, heigh = 3000)
 plot(dif, col=cl2, main = "Difference Forest Cover between 2000 and 2020")
 dev.off()
 
+
+# Download data from Copernicus Global Land Service on Leaf Area Index (1km V2)
+
+# listing all the files with the pattern present in the working directory
+LAIlist <- list.files(pattern="LAI") 
+LAIlist
+
+# Apply raster function to all the files
+LAIlist_rast <- lapply(LAIlist, raster) 
+LAIlist_rast
+
+# Create a stack
+LAIstack <- stack(LAIlist_rast) 
+LAIstack
+
+# Change variables'names 
+names(LAIstack) <- c("LAI.1km.1","LAI.1km.2","LAI.1km.3")
+
+# Crop over Costa Rica
+LAIcrop <- crop(LAIstack, ext)
+plot(LAIcrop)
+LAIcrop
+
+# Separate files, assigning to each element of the crop a name
+LAI2000 <- LAIcrop$LAI.1km.1
+LAI2010 <- LAIcrop$LAI.1km.2
+LAI2020 <- LAIcrop$LAI.1km.3
+
+# Convert raster into data frames to ggplot them
+LAI2000df <- as.data.frame(LAI2000, xy=TRUE) 
+LAI2010df <- as.data.frame(LAI2010, xy=TRUE) 
+LAI2020df <- as.data.frame(LAI2020, xy=TRUE) 
+
+# Plot them with ggplot
+p1 <- ggplot() + geom_raster(LAI2000df, mapping = aes(x=x, y=y, fill=LAI.1km.1)) + scale_fill_viridis(option = "magma") + ggtitle("Leaf Area Index in 2000") + labs(fill = "LAI")
+p2 <- ggplot() + geom_raster(LAI2010df, mapping = aes(x=x, y=y, fill=LAI.1km.2)) + scale_fill_viridis(option = "magma") + ggtitle("Leaf Area Index in 2010") + labs(fill = "LAI")
+p3 <- ggplot() + geom_raster(LAI2020df, mapping = aes(x=x, y=y, fill=LAI.1km.3)) + scale_fill_viridis(option = "magma") + ggtitle("Leaf Area Index in 2020") + labs(fill = "LAI")
+
+# Plot them together
+p1 + p2 + p3
+
+
+# Export file
+png("outputs_lai_ggplot.png", res = 500, width = 6000, heigh = 3000)
+p1 + p2 + p3
+dev.off()
+
+# Plot the difference between 2000 and 2020:
+dif_LAI<- LAI2000 - LAI2020
+
+# Create a color palette 
+cl2 <- colorRampPalette(colors = c('red','orange','green','black'))(100)
+cl3 <- colorRampPalette(colors = c('blue','purple','coral','white'))(100)
+
+par(mfrow=c(1,2))
+plot(dif_LAI, col=cl2, main = "Difference in LAI between 2000 and 2020")
+plot(dif_LAI, col=cl3, main = "Difference in LAI between 2000 and 2020")
+
+# Export file
+png("outputs_dif_LAI.png", res = 500, width = 6000, heigh = 3000)
+par(mfrow=c(1,2))
+plot(dif_LAI, col=cl2, main = "Difference in LAI between 2000 and 2020")
+plot(dif_LAI, col=cl3, main = "Difference in LAI between 2000 and 2020")
+dev.off()
+
+
