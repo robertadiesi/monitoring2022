@@ -5,7 +5,7 @@
 setwd("C:/Users/Rober/Desktop/exam_monitoring")
 
 
-# I recall the libraries for already installed packaged that I need 
+# I recall the libraries for already installed packages that I need 
 
 # to open Copernicus data with nc extention
 library(ncdf4) 
@@ -56,7 +56,7 @@ list_rast
 FCOVERstack <- stack(list_rast) 
 FCOVERstack
 
-# change the names because they are to long, make things more simple
+# change the names because they are too long, make things more simple
 names(FCOVERstack) <- c("FCOVER.1km.1","FCOVER.1km.2","FCOVER.1km.3","FCOVER.1km.4","FCOVER.1km.5")
 plot(FCOVERstack)
 
