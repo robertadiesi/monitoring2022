@@ -170,7 +170,7 @@ dev.off()
 dif <- FCOVER2000 - FCOVER2020
 dif
 
-# I don't like the colors, so let's change them using color Ramp Palette 
+# Let's change colors by using colorRampPalette 
 cl2 <- colorRampPalette(colors = c('dark red', 'red','orange','yellow'))(100)
 plot(dif, col=cl2, main = "Difference Forest Cover between 2000 and 2020")
 
