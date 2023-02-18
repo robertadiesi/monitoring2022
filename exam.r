@@ -104,6 +104,7 @@ grid.arrange(g1, g2, g3, g4, g5, nrow=3)
 dev.off()
 
 # Create a color palette with colorRampPalette and trying different colors
+# plot with a scale of green to give the idea of the vegetation cover
 cl1 <- colorRampPalette(colors = c('yellow','orange','lightgreen','darkgreen'))(100)
 plot(FCOVERcrop, col=cl1) # in yellow less vegetation cover
 
