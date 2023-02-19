@@ -16,7 +16,7 @@ library(raster)
 # to plot data with ggplot function
 library(ggplot2)  
 
-# to use viridis palette, a colorblind-friendly palettes 
+# to use viridis palette, a colorblind-friendly palette
 library(viridis)
 
 # to plot together different plots made with ggplot and create a multiframe
@@ -26,7 +26,7 @@ library(patchwork)
 library(gridExtra)  
 
 
-# The first aim of my project is to highlight the differences in Forest Cover in Costa Rica between 2000 and 2020
+# The first aim of my project is to highlight the differences of Forest Cover in Costa Rica between 2000 and 2020
 # I decided to focus on the dry season (Mid-November through May), so the downloaded data are from the months of January 
 
 
@@ -95,7 +95,7 @@ g5 <- ggplot() + geom_raster(FCOVER2020_df, mapping = aes(x=x, y=y, fill=FCOVER.
 #patchwork package 
 g2 + g1 + g3 / g4 + g5
 
-# I don't like it, so let's use 
+# or let's use 
 grid.arrange(g1, g2, g3, g4, g5, nrow=3)
 
 # saving the file in PNG format in the output folder
